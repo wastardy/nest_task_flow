@@ -4,6 +4,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from 'src/enums/task-status.enum';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class TaskRepository extends Repository<Task> {
@@ -18,26 +19,21 @@ export class TaskRepository extends Repository<Task> {
   async getTasksWithFilters(filterDto: GetTasksFilterDto): Promise<Task[]> {
     const { status, search } = filterDto;
 
-    const where: {
-      status?: TaskStatus;
-      OR?: {
-        title?: { contains: string };
-        description?: { contains: string };
-      }[];
-    } = {};
+    const query = this.createQueryBuilder('task');
 
     if (status) {
-      where.status = status;
+      query.andWhere('task.status = :status', { status });
     }
 
     if (search) {
-      where.OR = [
-        { title: { contains: search } },
-        { description: { contains: search } },
-      ];
+      query.andWhere(
+        '(LOWER(task.title) ILIKE LOWER(:search) OR LOWER(task.description) ILIKE LOWER(:search))',
+        { search: `%${search}%` }, // `%` додає підтримку часткового збігу
+      );
     }
 
-    return this.find({ where });
+    const tasks = await query.getMany();
+    return tasks;
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -60,21 +56,21 @@ export class TaskRepository extends Repository<Task> {
     });
 
     try {
-      console.log('About to save task:', task);
       await this.save(task);
-
-      console.log('Task saved successfully:', task);
       return task;
     } catch (error) {
-      console.log('Error saving task', error);
-      throw new Error('Error saving task');
+      throw new InternalServerErrorException('Failed to create task', {
+        cause: error,
+      });
     }
   }
 
   async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
     const task = await this.getTaskById(id);
+
     task.status = status;
     await this.save(task);
+
     return task;
   }
 
