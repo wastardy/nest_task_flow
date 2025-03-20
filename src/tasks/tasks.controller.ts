@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -29,5 +30,10 @@ export class TasksController {
   @HttpCode(HttpStatus.CREATED)
   createTask(@Body() createTaskDto: CreateTaskDto): Task {
     return this.tasksServise.createTask(createTaskDto);
+  }
+
+  @Delete('/:id')
+  deleteTask(id: string): void {
+    this.tasksServise.deleteTask(id);
   }
 }
