@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
@@ -17,6 +18,11 @@ export class TasksController {
   @Get()
   getAllTasks(): Task[] {
     return this.tasksServise.getAllTasks();
+  }
+
+  @Get('/:id')
+  getTaskById(@Param('id') id: string): Task {
+    return this.tasksServise.getTaskById(id);
   }
 
   @Post()
