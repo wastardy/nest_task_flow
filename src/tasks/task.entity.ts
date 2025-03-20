@@ -1,4 +1,4 @@
-import { TaskStatus } from 'src/enums/task.enum';
+import { TaskStatus } from 'src/enums/task-status.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
