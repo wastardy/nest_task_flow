@@ -2,11 +2,13 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth.credentials.dto';
 import errorConstants from '../constants/error.constants';
+import successConstants from '../constants/success.constants';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -35,6 +37,14 @@ export class UserRepository {
         throw new ConflictException(errorConstants.USER_ALREADY_EXIST);
       }
       throw new InternalServerErrorException();
+    }
+  }
+
+  async findUserByUsername(username: string): Promise<User | null> {
+    try {
+      return this.usersRepository.findOneBy({ username });
+    } catch (error) {
+      throw new UnauthorizedException(errorConstants.INVALID_CREDENTIALS);
     }
   }
 }
