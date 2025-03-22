@@ -28,11 +28,14 @@ export class TasksController {
   constructor(private tasksServise: TasksService) {}
 
   @Get()
-  getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+  getTasks(
+    @Query() filterDto: GetTasksFilterDto,
+    @GetUser() user: User,
+  ): Promise<Task[]> {
     if (Object.keys(filterDto).length) {
-      return this.tasksServise.getTasksWithFilters(filterDto);
+      return this.tasksServise.getTasksWithFilters(filterDto, user);
     } else {
-      return this.tasksServise.getAllTasks();
+      return this.tasksServise.getAllTasks(user);
     }
   }
 
