@@ -4,10 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './tasks/task.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationsSchema } from './config/config.schema';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: configValidationsSchema,
+    }),
     TasksModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
