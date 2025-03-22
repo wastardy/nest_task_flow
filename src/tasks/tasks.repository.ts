@@ -6,6 +6,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
+import errorConstants from 'src/constants/error.constants';
 
 @Injectable()
 export class TaskRepository extends Repository<Task> {
@@ -41,11 +42,11 @@ export class TaskRepository extends Repository<Task> {
     return tasks;
   }
 
-  async getTaskById(id: string): Promise<Task> {
-    const foundTask = await this.findOne({ where: { id } });
+  async getTaskById(id: string, user: User): Promise<Task> {
+    const foundTask = await this.findOne({ where: { id, user } });
 
     if (!foundTask) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
+      throw new NotFoundException(errorConstants.TASK_NOT_FOUND);
     }
 
     return foundTask;
@@ -65,14 +66,16 @@ export class TaskRepository extends Repository<Task> {
       await this.save(task);
       return task;
     } catch (error) {
-      throw new InternalServerErrorException('Failed to create task', {
-        cause: error,
-      });
+      throw new InternalServerErrorException(errorConstants.TASK_NOT_CREATED);
     }
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
+  async updateTaskStatus(
+    id: string,
+    status: TaskStatus,
+    user: User,
+  ): Promise<Task> {
+    const task = await this.getTaskById(id, user);
 
     task.status = status;
     await this.save(task);
@@ -84,7 +87,7 @@ export class TaskRepository extends Repository<Task> {
     const result = await this.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
+      throw new NotFoundException(errorConstants.TASK_NOT_FOUND);
     }
   }
 }
