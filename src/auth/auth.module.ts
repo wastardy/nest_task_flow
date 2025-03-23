@@ -12,16 +12,17 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
+    ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET_KEY'),
         signOptions: {
           expiresIn: '1h', // also can be number in seconds like 3600
         },
       }),
-      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([User]),
   ],
