@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as jwt from 'jsonwebtoken';
-import errorConstants from 'src/constants/error.constants';
+import errorConstants from '../../constants/error.constants';
 
 @Injectable()
 export class TokenProvider {

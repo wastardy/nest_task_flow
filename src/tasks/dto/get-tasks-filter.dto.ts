@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { TaskStatus } from 'src/enums/task-status.enum';
+import { TaskStatus } from '../../enums/task-status.enum';
 
 export class GetTasksFilterDto {
   @IsOptional()
