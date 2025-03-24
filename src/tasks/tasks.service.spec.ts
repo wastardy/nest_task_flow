@@ -1,10 +1,12 @@
 import { Test } from '@nestjs/testing';
 import { TaskRepository } from '../tasks/tasks.repository';
 import { TasksService } from '../tasks/tasks.service';
-import passport from 'passport';
+import { TaskStatus } from '../enums/task-status.enum';
 
 const mockTasksRepository = () => ({
   getAllTasks: jest.fn(),
+
+  getTasksWithFilters: jest.fn(),
 });
 
 const mockUser = {
@@ -12,6 +14,11 @@ const mockUser = {
   username: 'Test User',
   password: 'Test Password',
   tasks: [],
+};
+
+const taskFilterDto = {
+  status: TaskStatus.OPEN,
+  search: 'Test',
 };
 
 describe('TasksService', () => {
@@ -31,11 +38,23 @@ describe('TasksService', () => {
   });
 
   describe('getTasks', () => {
-    it('calls TaskRepository.getTasks and returns the result', async () => {
+    it('calls TaskRepository.getAllTasks and returns the result', async () => {
       tasksRepository.getAllTasks.mockResolvedValue('someValue'); // the way tio deal with promises
       const result = await tasksService.getAllTasks(mockUser);
 
       expect(result).toEqual('someValue');
+    });
+
+    it('calls TaskRepository.getTasksWithFilters and returns the result', async () => {
+      tasksRepository.getTasksWithFilters.mockResolvedValue(
+        'tasks with filter',
+      );
+      const result = await tasksService.getTasksWithFilters(
+        taskFilterDto,
+        mockUser,
+      );
+
+      expect(result).toEqual('tasks with filter');
     });
   });
 });
