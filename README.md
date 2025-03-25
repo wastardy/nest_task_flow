@@ -159,6 +159,7 @@ docker-compose up --build
 docker ps
 ```
 
+
 > You should see something like this:
 
 ```nginx
@@ -166,9 +167,9 @@ CONTAINER ID   IMAGE                COMMAND                  CREATED
 0a546103ea02   nest_task_flow-app   "docker-entrypoint.s…"   8 minutes ago
 b7c9d8f1e234   postgres:13          "docker-entrypoint.s…"   8 minutes ago
 
-STATUS                   PORTS                    NAMES
-Up 8 minutes             0.0.0.0:3000->3000/tcp   todo-api
-Up 8 minutes             0.0.0.0:5432->5432/tcp   postgres
+STATUS                   PORTS                                NAMES
+Up 8 minutes             0.0.0.0:3000->3000/tcp               todo-api
+Up 8 minutes             0.0.0.0:5432->5432/tcp               postgres
 ```
 
 ### 3. Access the application:
