@@ -9,7 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth.credentials.dto';
 import errorConstants from '../constants/error.constants';
 import successConstants from '../constants/success.constants';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserRepository {
