@@ -1,27 +1,8 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📲 ToDo App [TaskFlow ⬅](https://client-task-flow.vercel.app/#/)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-# TaskFlow
+<img src="./explanations/signin.png" style="width: 70%">
+<img src="./explanations/tasks_list.png" style="width: 70%">
+<img src="./explanations/create_task.png" style="width: 70%">
 
 ## Overview
 
@@ -127,14 +108,15 @@ The project aims to achieve the following key objectives:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-repository/task-management-system.git
+   git clone https://github.com/wastardy/nest_task_flow.git
    ```
 
 2. Install dependencies:
 
    ```bash
-   cd task-management-system
-   npm install
+   cd *project folder*
+
+   yarn install
    ```
 
 3. Set up the database connection and environment variables:
@@ -142,25 +124,69 @@ The project aims to achieve the following key objectives:
    Create a `.env` file and add the necessary environment variables:
 
    ```
-   DATABASE_URL=your_database_connection_url
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres-user
+   DB_PASSWORD=postgres-password
+   DB_NAME=your-db-name
    JWT_SECRET=your_jwt_secret_key
    ```
 
 4. Run the application:
 
    ```bash
-   npm run start
+   yarn start
    ```
 
 5. The application will be running at `http://localhost:3000`.
+
+## Docker Setup 🐳
+
+If you'd like to run the application using Docker, follow these steps:
+
+### 1. Build the Docker containers:
+
+If you have already built the Docker image, you can skip the build step.
+To build and start both the application and PostgreSQL in containers:
+
+```bash
+docker-compose up --build
+```
+
+### 2. Check the status of running containers:
+
+```bash
+docker ps
+```
+
+> You should see something like this:
+
+```nginx
+CONTAINER ID   IMAGE                COMMAND                  CREATED
+0a546103ea02   nest_task_flow-app   "docker-entrypoint.s…"   8 minutes ago
+b7c9d8f1e234   postgres:13          "docker-entrypoint.s…"   8 minutes ago
+
+STATUS                   PORTS                    NAMES
+Up 8 minutes             0.0.0.0:3000->3000/tcp   todo-api
+Up 8 minutes             0.0.0.0:5432->5432/tcp   postgres
+```
+
+### 3. Access the application:
+
+Once the containers are up, the API will be running at http://localhost:3000, and PostgreSQL will be running inside the Docker network.
+
+If you use Docker, you don't need to install PostgreSQL separately — it's running inside the postgres container.
+
+### 4. Stop the containers:
+
+```bash
+docker-compose down
+```
 
 ## Technologies Used:
 
 - **NestJS**: A framework for building efficient and scalable server-side applications.
 - **TypeORM**: An ORM for connecting to relational databases.
 - **JWT**: JSON Web Tokens for secure authentication.
-- **PostgreSQL/MySQL**: Relational database for storing tasks and users.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **PostgreSQL**: Relational database for storing tasks and users.
+- **Docker**: Build docker image for this project and connection to PostgresSQL
